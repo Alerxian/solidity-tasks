@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <Providers>
           <NavBar />
-          <div className="min-h-screen text-white bg-linear-to-b from-[#3f0efb] via-[#6a36f3] to-[#8a3af2]">
+          <div className="text-white bg-linear-to-b from-[#3f0efb] via-[#6a36f3] to-[#8a3af2]">
             {children}
           </div>
           <Toaster />

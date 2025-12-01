@@ -36,7 +36,7 @@ type PoolInfo = readonly [
 ];
 
 export default function Stake({
-  pid,
+  pid = 0,
   stakeAddress,
   account,
 }: {
@@ -52,7 +52,7 @@ export default function Stake({
     address: stakeAddress,
     abi: MetaNodeStakeABI,
     functionName: "pool",
-    args: [BigInt(pid)],
+    args: [BigInt(pid || 0)],
   });
 
   const info = rawInfo as PoolInfo | undefined;
@@ -66,8 +66,8 @@ export default function Stake({
     address: stakeAddress,
     abi: MetaNodeStakeABI,
     functionName: "stakingBalance",
-    args: [BigInt(pid), account!],
-    query: { enabled: Boolean(account) },
+    args: [BigInt(pid ?? 0), account!],
+    query: { enabled: Boolean(account) && typeof pid === "number" },
   });
 
   // 获取质押代币的小数位数 如果是 ETH 质押池则默认 18 位

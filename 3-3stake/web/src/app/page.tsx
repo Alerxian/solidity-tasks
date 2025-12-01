@@ -31,6 +31,19 @@ const itemVariants = {
   },
 } as const;
 
+const cardVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: (i: number) => ({
+    y: 0,
+    opacity: 1,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: "easeOut" as const,
+    },
+  }),
+} as const;
+
 import { PoolCard } from "@/components/stake/PoolCard";
 
 export default function Home() {
@@ -97,13 +110,12 @@ export default function Home() {
   });
 
   return (
-    <main className="min-h-[calc(100vh-56px)] px-8 py-16 text-white">
+    <main className="px-8 py-4 text-white">
       <motion.div
         className="mx-auto max-w-5xl"
         variants={containerVariants}
-        initial={false}
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        initial="hidden"
+        animate="visible"
       >
         <motion.h1
           className="text-5xl md:text-6xl font-bold mb-4"
@@ -119,14 +131,28 @@ export default function Home() {
         </motion.p>
 
         <motion.div variants={containerVariants} className="min-w-xl mt-4">
-          <h2 className="text-2xl font-bold mb-4">
+          <motion.h2
+            className="text-2xl font-bold mb-4"
+            variants={itemVariants}
+          >
             质押池列表 ({String(poolLength || 0)})
-          </h2>
-          <div className="grid gap-4 md:grid-cols-2">
+          </motion.h2>
+          <motion.div
+            className="grid gap-4 md:grid-cols-2"
+            variants={containerVariants}
+          >
             {Array.from({ length: Number(poolLength || 0) }).map((_, i) => (
-              <PoolCard key={i} pid={i} />
+              <motion.div
+                key={i}
+                custom={i}
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <PoolCard pid={i} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
 
         <motion.div

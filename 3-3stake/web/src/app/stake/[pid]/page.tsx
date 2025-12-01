@@ -2,6 +2,7 @@
 import Stake from "@/components/stake/Stake";
 import WithdrawList from "@/components/stake/WithdrawList";
 import ClaimList from "@/components/stake/ClaimList";
+import HistoryList from "@/components/stake/HistoryList";
 import { STAKE_ADDRESS } from "@/lib/constants";
 import { useConnection } from "wagmi";
 import { useParams } from "next/navigation";
@@ -21,6 +22,11 @@ export default function StakePidPage() {
             account={address}
           />
           <WithdrawList
+            pid={numPid}
+            stakeAddress={STAKE_ADDRESS}
+            account={address}
+          />
+          <HistoryList
             pid={numPid}
             stakeAddress={STAKE_ADDRESS}
             account={address}
