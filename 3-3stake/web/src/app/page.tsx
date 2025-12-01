@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { Address, parseEther } from "viem";
 import { STAKE_ADDRESS } from "@/lib/constants";
 import { MetaNodeStakeABI } from "@/abi/MetaNodeStake";
+import "@rainbow-me/rainbowkit/styles.css";
 
 const containerVariants = {
   hidden: { opacity: 0 },

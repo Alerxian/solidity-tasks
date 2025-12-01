@@ -1,5 +1,5 @@
 "use client";
-import { createConfig, http, cookieStorage, createStorage } from "wagmi";
+import { createConfig, http } from "wagmi";
 import { injected, walletConnect } from "@wagmi/connectors";
 import { sepolia } from "wagmi/chains";
 import type { Chain } from "viem";
@@ -18,9 +18,9 @@ const localChain: Chain = {
 export const config = createConfig({
   chains: [localChain, sepolia],
   ssr: true,
-  storage: createStorage({
-    storage: cookieStorage,
-  }),
+  // storage: createStorage({
+  //   storage: cookieStorage,
+  // }),
   connectors: [
     injected(),
     ...(typeof window !== "undefined"

@@ -1,7 +1,12 @@
 "use client";
+
 import Link from "next/link";
-// import { usePathname } from "next/navigation";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import dynamic from "next/dynamic";
+
+const ConnectButton = dynamic(
+  () => import("@rainbow-me/rainbowkit").then((mod) => mod.ConnectButton),
+  { ssr: false }
+);
 
 // const tabs = [
 //   { href: "/", label: "Home" },

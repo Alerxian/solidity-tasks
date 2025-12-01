@@ -1,14 +1,20 @@
 "use client";
-import { WagmiProvider } from "wagmi";
+import { State, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/lib/wagmi";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { useState } from "react";
 
-const client = new QueryClient();
-
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  initialState,
+}: {
+  children: React.ReactNode;
+  initialState?: State;
+}) {
+  const [client] = useState(() => new QueryClient());
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={config} initialState={initialState}>
       <QueryClientProvider client={client}>
         <RainbowKitProvider>{children}</RainbowKitProvider>
       </QueryClientProvider>
