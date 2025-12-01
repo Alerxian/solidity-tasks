@@ -543,7 +543,7 @@ contract MetaNodeStake is
         );
         // 更新质押池质押总量
         pool_.stTokenAmount -= _amount;
-        // 更新用户已领取奖励
+        // 更新用户已领取的奖励
         user_.finishedMetaNode =
             (user_.stAmount * pool_.accMetaNodePerST) /
             (1 ether);
@@ -556,6 +556,21 @@ contract MetaNodeStake is
     ) external whenNotPaused nonReentrant whenWithdrawNotPaused checkPid(_pid) {
         User storage user_ = user[_pid][msg.sender];
         Pool storage pool_ = pool[_pid];
+
+        // 在提取时也需要更新池子状态和用户奖励信息
+        updatePool(_pid);
+        
+        if (user_.stAmount > 0) {
+             uint256 pendingMetaNode_ = (user_.stAmount * pool_.accMetaNodePerST) /
+                (1 ether) -
+                user_.finishedMetaNode;
+            if (pendingMetaNode_ > 0) {
+                user_.pendingMetaNode += pendingMetaNode_;
+            }
+        }
+        
+        // 更新 Reward Debt，防止重复计算奖励
+        user_.finishedMetaNode = (user_.stAmount * pool_.accMetaNodePerST) / (1 ether);
 
         uint256 pendingWithdraw_;
         uint256 popNum_;

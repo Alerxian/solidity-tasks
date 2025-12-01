@@ -17,5 +17,5 @@ export const MetaNodeStakeABI = [
   { "type": "function", "name": "unStake", "inputs": [{ "type": "uint256" }, { "type": "uint256" }], "outputs": [], "stateMutability": "nonpayable" },
   { "type": "function", "name": "withdraw", "inputs": [{ "type": "uint256" }], "outputs": [], "stateMutability": "nonpayable" },
   { "type": "function", "name": "claim", "inputs": [{ "type": "uint256" }], "outputs": [], "stateMutability": "nonpayable" },
-  { "type": "function", "name": "user", "inputs": [{ "type": "uint256" }, { "type": "address" }], "outputs": [{ "type": "uint256", "name": "stAmount" }, { "type": "uint256", "name": "finishedMetaNode" }, { "type": "uint256", "name": "pendingMetaNode" }], "stateMutability": "view" }
+  { "type": "function", "name": "user", "inputs": [{ "type": "uint256" }, { "type": "address" }], "outputs": [{ "type": "uint256", "name": "stAmount" }, { "type": "uint256", "name": "finishedMetaNode" }, { "type": "uint256", "name": "pendingMetaNode" }, { "type": "uint256", "name": "totalClaimed" }], "stateMutability": "view" }
 ]

@@ -41,10 +41,11 @@ export default function ClaimList({
     query: { enabled: Boolean(account) },
   });
 
-  const userDetails = userInfo as readonly [bigint, bigint, bigint] | undefined;
-  // user returns (stAmount, finishedMetaNode, pendingMetaNode)
-  // Note: pendingMetaNode in struct is internal accounting, actual pending is calculated by function pendingMetaNode
-  const finishedRewards = userDetails?.[1] ?? 0n;
+  const userDetails = userInfo as
+    | readonly [bigint, bigint, bigint, bigint]
+    | undefined;
+  // user returns (stAmount, finishedMetaNode, pendingMetaNode, totalClaimed)
+  const finishedRewards = userDetails?.[3] ?? 0n;
 
   const pendingRewards = (pending as bigint) ?? 0n;
 

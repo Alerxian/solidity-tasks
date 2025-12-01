@@ -11,6 +11,7 @@
   "dependencies": {
     "@base-org/account": "^2.5.0",
     "@metamask/sdk": "^0.34.0",
+    "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "1.2.4",
     "@rainbow-me/rainbowkit": "2.2.9",
     "@safe-global/safe-apps-provider": "^0.18.6",

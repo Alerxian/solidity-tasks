@@ -15,6 +15,15 @@ import { Button } from "@/components/ui/button";
 import { formatEther, parseEther, parseUnits, type Address } from "viem";
 import { ZERO_ADDRESS } from "@/lib/constants";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type PoolInfo = readonly [
   Address,
@@ -47,7 +56,7 @@ export default function Stake({
   });
 
   const info = rawInfo as PoolInfo | undefined;
-  const [stToken, stTokenAmount, poolWeight, , minDeposit, , lockedBlocks] =
+  const [stToken, stTokenAmount, poolWeight, , , minDeposit, lockedBlocks] =
     info || [];
 
   const isETHPool = stToken === ZERO_ADDRESS;
@@ -74,6 +83,7 @@ export default function Stake({
   // 质押金额输入框
   const [amount, setAmount] = useState("");
   const [isPending, setIsPending] = useState(false);
+  const [isUnstakeDialogOpen, setIsUnstakeDialogOpen] = useState(false);
 
   async function deposit() {
     const amt = isETHPool
@@ -171,7 +181,9 @@ export default function Stake({
       toast.error("钱包未连接或网络不可用");
       return;
     }
+
     setIsPending(true);
+    setIsUnstakeDialogOpen(false); // Close dialog
     try {
       const { request } = await publicClient.simulateContract({
         account,
@@ -182,7 +194,7 @@ export default function Stake({
       });
       const hash = await walletClient.writeContract(request);
       await publicClient.waitForTransactionReceipt({ hash });
-      toast.success("交易已确认");
+      toast.success("交易已确认，资金已进入锁定期");
       setAmount("");
     } catch (e: unknown) {
       const msg =
@@ -228,13 +240,50 @@ export default function Stake({
             >
               质押
             </Button>
-            <Button
-              variant="destructive"
-              onClick={unStake}
-              disabled={isPending || !account || !amount}
+
+            <Dialog
+              open={isUnstakeDialogOpen}
+              onOpenChange={setIsUnstakeDialogOpen}
             >
-              解除质押
-            </Button>
+              <DialogTrigger asChild>
+                <Button
+                  variant="destructive"
+                  disabled={isPending || !account || !amount}
+                >
+                  解除质押
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-black/90 border-white/20 text-white">
+                <DialogHeader>
+                  <DialogTitle>确认解除质押？</DialogTitle>
+                  <DialogDescription className="text-white/80">
+                    解除质押后，资金将锁定{" "}
+                    <span className="font-bold text-red-400">
+                      {String(lockedBlocks || 0)}
+                    </span>{" "}
+                    个区块才能提取。
+                    <br />
+                    在此期间您将无法获得任何奖励。
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsUnstakeDialogOpen(false)}
+                    className="text-black"
+                  >
+                    取消
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={unStake}
+                    disabled={isPending}
+                  >
+                    {isPending ? "交易中..." : "确认解除"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </CardContent>
